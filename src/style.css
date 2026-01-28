@@ -1,0 +1,153 @@
+/* src/style.css */
+
+/* --- VARIABLES --- */
+:root {
+  --matrix-green: #00ff41;
+  --matrix-dark-green: #00dd00;
+  --matrix-bg: #000000;
+}
+
+/* --- BASE RESET --- */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 0;
+  background: var(--matrix-bg);
+  color: var(--matrix-green);
+  font-family: "VT323", monospace;
+  overflow: hidden; /* Prevent scrollbars from canvas */
+}
+
+/* --- BACKGROUND CANVAS --- */
+#matrix-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  z-index: 0; /* Behind everything */
+  background: #000;
+}
+
+/* --- COMMON UI COMPONENTS --- */
+
+/* 1. Layout Container */
+.content-wrapper {
+  position: relative;
+  z-index: 10;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  overflow-y: auto;
+}
+
+/* 2. Glass Card Effect */
+.glass-card {
+  background: rgba(0, 0, 0, 0.85);
+  border: 1px solid var(--matrix-green);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+}
+@media (min-width: 640px) { .glass-card { padding: 2rem; } }
+
+/* Card Width Control */
+.card-width { width: 92vw; }
+@media (min-width: 641px) { .card-width { width: 450px; } }
+
+/* 3. Text Effects */
+.glow-text {
+  text-shadow: 0 0 2px var(--matrix-green), 0 0 8px var(--matrix-green);
+}
+
+.text-white-glow {
+  color: white;
+  text-shadow: 0 0 10px #00ff41;
+}
+
+/* --- HOME PAGE SPECIFIC --- */
+
+/* Profile Image */
+.profile-avatar {
+  width: 7rem; 
+  height: 7rem;
+  border-radius: 9999px;
+  overflow: hidden;
+  border: 2px solid var(--matrix-green);
+  box-shadow: 0 0 10px var(--matrix-green);
+  transition: transform 0.3s ease;
+  background-color: black;
+}
+.profile-avatar:hover { transform: scale(1.05); }
+
+/* Buttons */
+.link-btn {
+  display: block;
+  width: 100%;
+  position: relative;
+  border: 1px solid var(--matrix-green);
+  color: var(--matrix-green);
+  background: rgba(0, 20, 0, 0.7);
+  transition: all 0.2s ease;
+  overflow: hidden;
+  border-radius: 0.25rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1rem; /* Spacing between buttons */
+}
+
+.link-btn:hover {
+  background: var(--matrix-green);
+  color: #000;
+  box-shadow: 0 0 15px var(--matrix-green);
+  transform: translateY(-2px);
+}
+
+.link-btn-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+
+.link-btn-icon {
+  position: absolute;
+  left: 1rem;
+  font-size: 1.2rem;
+}
+
+/* --- PORTFOLIO PAGE SPECIFIC --- */
+
+/* Glitch Animation */
+.glitch-text {
+  position: relative;
+  text-shadow: 2px 0 #fff, -2px 0 #fff; 
+  animation: glitch 1s infinite linear alternate-reverse;
+}
+@keyframes glitch {
+  0% { text-shadow: 2px 0 #0f0, -2px 0 #000; }
+  100% { text-shadow: -2px 0 #0f0, 2px 0 #000; }
+}
+
+/* Back Button */
+.back-btn {
+  border: 1px solid var(--matrix-green);
+  padding: 10px 20px;
+  color: var(--matrix-green);
+  transition: 0.3s;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 20px;
+  font-weight: bold;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.back-btn:hover {
+  background: var(--matrix-green);
+  color: black;
+}
