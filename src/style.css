@@ -368,3 +368,125 @@ body.glitch-mode-red footer span {
 .link-btn:nth-child(4) { animation-delay: 0.3s; }
 .link-btn:nth-child(5) { animation-delay: 0.7s; }
 .spotify-hacked { animation-delay: 0.2s; }
+
+/* --- SPOTIFY WIDGET & TOGGLE SYSTEM --- */
+
+/* Main Container */
+.spotify-hacked {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+  
+  /* OPEN STATE DIMENSIONS */
+  width: 300px;
+  height: 82px;
+  
+  background: rgba(0, 0, 0, 0.95);
+  border: 1px solid var(--matrix-green);
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+  border-radius: 12px;
+  
+  /* IMPORTANT: overflow hidden keeps the iframe rounded, 
+     so we must place buttons INSIDE the box */
+  overflow: hidden; 
+  
+  /* Matrix Filter Effect */
+  filter: sepia(100%) hue-rotate(100deg) saturate(300%) contrast(1.2) brightness(0.8);
+  
+  /* Smooth Animation */
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.spotify-hacked:hover {
+  filter: none;
+  box-shadow: 0 0 25px #1DB954;
+}
+
+/* --- TOGGLE BUTTON (Big Music Icon) --- */
+.spotify-toggle-btn {
+  position: absolute;
+  inset: 0; /* Fill the whole box */
+  background: transparent;
+  border: none;
+  color: var(--matrix-green);
+  font-size: 1.5rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  opacity: 0;           /* Hidden by default (when open) */
+  pointer-events: none; /* Not clickable when open */
+  transition: opacity 0.3s;
+  z-index: 10;
+}
+
+/* --- MINIMIZE BUTTON (Small Minus Icon) --- */
+.spotify-minimize-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
+  
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid var(--matrix-green);
+  border-radius: 50%; /* Circle */
+  color: var(--matrix-green);
+  font-size: 12px;
+  cursor: pointer;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  
+  z-index: 50; /* Above the iframe */
+  opacity: 1;
+  transition: all 0.2s;
+}
+
+.spotify-minimize-btn:hover {
+  background: var(--matrix-green);
+  color: black;
+  transform: scale(1.1);
+}
+
+/* --- CLOSED STATE (Applied via JS) --- */
+.spotify-hacked.closed {
+  width: 50px !important;
+  height: 50px !important;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+/* When closed: Hide Player & Minimize Button */
+.spotify-hacked.closed .spotify-player-container,
+.spotify-hacked.closed .spotify-minimize-btn {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* When closed: Show Toggle Button */
+.spotify-hacked.closed .spotify-toggle-btn {
+  opacity: 1;
+  pointer-events: auto;
+  /* Heartbeat animation */
+  animation: pulse-green 2s infinite;
+}
+
+@keyframes pulse-green {
+  0% { text-shadow: 0 0 5px var(--matrix-green); transform: scale(1); }
+  50% { text-shadow: 0 0 20px var(--matrix-green); transform: scale(1.1); }
+  100% { text-shadow: 0 0 5px var(--matrix-green); transform: scale(1); }
+}
+
+/* Mobile Adjustment */
+@media (max-width: 640px) {
+  .spotify-hacked {
+    right: 20px;
+    bottom: 20px;
+    /* Prevent overflow on small screens */
+    max-width: calc(100vw - 40px);
+  }
+}
