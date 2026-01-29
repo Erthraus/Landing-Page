@@ -196,4 +196,29 @@ document.addEventListener("DOMContentLoaded", () => {
         resize();
         requestAnimationFrame(draw);
     });
+
+    // --- SPOTIFY WIDGET LOGIC (REWRITTEN) ---
+    const spotifyWidget = document.getElementById('spotify-widget');
+    const toggleBtn = document.getElementById('spotify-toggle');
+    const minimizeBtn = document.getElementById('spotify-minimize');
+
+    if (spotifyWidget && toggleBtn && minimizeBtn) {
+        
+        // 1. Initial State: Closed on Mobile, Open on Desktop
+        if (window.innerWidth < 768) {
+            spotifyWidget.classList.add('closed');
+        }
+
+        // 2. Open Action (Clicking the Big Music Icon)
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent glitches
+            spotifyWidget.classList.remove('closed');
+        });
+
+        // 3. Close Action (Clicking the Small Minus Icon)
+        minimizeBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent glitches
+            spotifyWidget.classList.add('closed');
+        });
+    }
 });
