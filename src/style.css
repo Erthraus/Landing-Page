@@ -1,6 +1,6 @@
 /* src/style.css */
 
-/* --- VARIABLES --- */
+/* --- GLOBAL VARIABLES --- */
 :root {
   --matrix-green: #00ff41;
   --matrix-dark-green: #00dd00;
@@ -16,7 +16,7 @@ body {
   background: var(--matrix-bg);
   color: var(--matrix-green);
   font-family: "VT323", monospace;
-  overflow: hidden; /* Prevent scrollbars from canvas */
+  overflow: hidden; /* Prevent scrollbars because the canvas covers the screen */
 }
 
 /* --- BACKGROUND CANVAS --- */
@@ -26,7 +26,7 @@ body {
   width: 100vw;
   height: 100vh;
   display: block;
-  z-index: 0; /* Behind everything */
+  z-index: 0; /* Stays behind everything */
   background: #000;
 }
 
@@ -41,10 +41,11 @@ body {
   align-items: center;
   justify-content: center;
   padding: 2.5rem 1rem;
-  overflow-y: auto;
+  overflow-y: auto; /* Allows scrolling if content is tall */
 }
 
 /* 2. Glass Card Effect */
+/* The main container for content with a semi-transparent black background */
 .glass-card {
   background: rgba(0, 0, 0, 0.85);
   border: 1px solid var(--matrix-green);
@@ -52,24 +53,28 @@ body {
   box-shadow: 0 0 10px rgba(0, 255, 65, 0.2);
   border-radius: 0.5rem;
   padding: 1.5rem;
+  /* Smooth transition for color changes during glitch */
+  transition: all 0.5s ease-in-out;
 }
 @media (min-width: 640px) { .glass-card { padding: 2rem; } }
 
-/* Card Width Control */
+/* Responsive Width Control */
 .card-width { width: 92vw; }
 @media (min-width: 641px) { .card-width { width: 450px; } }
 
 /* 3. Text Effects */
 .glow-text {
   text-shadow: 0 0 2px var(--matrix-green), 0 0 8px var(--matrix-green);
+  transition: all 0.5s ease-in-out;
 }
 
 .text-white-glow {
   color: white;
   text-shadow: 0 0 10px #00ff41;
+  transition: all 0.5s ease-in-out;
 }
 
-/* --- HOME PAGE SPECIFIC --- */
+/* --- COMPONENT STYLES --- */
 
 /* Profile Image */
 .profile-avatar {
@@ -79,12 +84,12 @@ body {
   overflow: hidden;
   border: 2px solid var(--matrix-green);
   box-shadow: 0 0 10px var(--matrix-green);
-  transition: transform 0.3s ease;
+  transition: all 0.5s ease-in-out; 
   background-color: black;
 }
 .profile-avatar:hover { transform: scale(1.05); }
 
-/* Buttons */
+/* Link Buttons */
 .link-btn {
   display: block;
   width: 100%;
@@ -92,12 +97,13 @@ body {
   border: 1px solid var(--matrix-green);
   color: var(--matrix-green);
   background: rgba(0, 20, 0, 0.7);
-  transition: all 0.2s ease;
   overflow: hidden;
   border-radius: 0.25rem;
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
-  margin-bottom: 1rem; /* Spacing between buttons */
+  margin-bottom: 1rem;
+  /* Smooth transition for theme switching */
+  transition: all 0.5s ease-in-out;
 }
 
 .link-btn:hover {
@@ -105,6 +111,8 @@ body {
   color: #000;
   box-shadow: 0 0 15px var(--matrix-green);
   transform: translateY(-2px);
+  /* Faster transition for hover effects */
+  transition: all 0.2s ease;
 }
 
 .link-btn-inner {
@@ -121,20 +129,7 @@ body {
   font-size: 1.2rem;
 }
 
-/* --- PORTFOLIO PAGE SPECIFIC --- */
-
-/* Glitch Animation */
-.glitch-text {
-  position: relative;
-  text-shadow: 2px 0 #fff, -2px 0 #fff; 
-  animation: glitch 1s infinite linear alternate-reverse;
-}
-@keyframes glitch {
-  0% { text-shadow: 2px 0 #0f0, -2px 0 #000; }
-  100% { text-shadow: -2px 0 #0f0, 2px 0 #000; }
-}
-
-/* Back Button */
+/* Back Button (Used in Portfolio Page) */
 .back-btn {
   border: 1px solid var(--matrix-green);
   padding: 10px 20px;
@@ -151,3 +146,225 @@ body {
   background: var(--matrix-green);
   color: black;
 }
+
+/* --- TEXT GLITCH EFFECT --- */
+/* Used for the name "Mustafa Kemal Öz" */
+.cyber-glitch {
+  position: relative;
+  display: inline-block;
+  color: white; 
+}
+
+/* Duplicate the text twice to create the RGB split effect */
+.cyber-glitch::before,
+.cyber-glitch::after {
+  content: attr(data-text); /* Pulls text directly from HTML */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.8);
+}
+
+/* Layer 1: Pink/Red Shift */
+.cyber-glitch::before {
+  left: 2px;
+  text-shadow: -2px 0 #ff00c1; 
+  clip-path: inset(20% 0 80% 0);
+  animation: glitch-anim-1 4s infinite linear alternate-reverse;
+}
+
+/* Layer 2: Cyan Shift */
+.cyber-glitch::after {
+  left: -2px;
+  text-shadow: -2px 0 #00fff9; 
+  clip-path: inset(80% 0 10% 0);
+  animation: glitch-anim-2 4s infinite linear alternate-reverse;
+}
+
+/* Random Slice Animations for Text */
+@keyframes glitch-anim-1 {
+  0% { clip-path: inset(40% 0 61% 0); }
+  20% { clip-path: inset(92% 0 1% 0); }
+  40% { clip-path: inset(43% 0 1% 0); }
+  60% { clip-path: inset(25% 0 58% 0); }
+  80% { clip-path: inset(54% 0 7% 0); }
+  100% { clip-path: inset(58% 0 43% 0); }
+}
+
+@keyframes glitch-anim-2 {
+  0% { clip-path: inset(24% 0 29% 0); }
+  20% { clip-path: inset(54% 0 21% 0); }
+  40% { clip-path: inset(2% 0 35% 0); }
+  60% { clip-path: inset(57% 0 10% 0); }
+  80% { clip-path: inset(38% 0 38% 0); }
+  100% { clip-path: inset(79% 0 6% 0); }
+}
+
+/* --- FIXED THEME SONG WIDGET --- */
+/* Fixed at the bottom right corner */
+.spotify-hacked {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  z-index: 100;
+  
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid var(--matrix-green);
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.3);
+  border-radius: 12px;
+  overflow: hidden;
+  
+  /* Applies a Matrix-style filter to the Spotify Iframe */
+  filter: sepia(100%) hue-rotate(100deg) saturate(300%) contrast(1.2) brightness(0.8);
+  transition: all 0.5s ease-in-out;
+}
+
+.spotify-hacked:hover {
+  filter: none; /* Restore original colors */
+  transform: scale(1.05);
+  box-shadow: 0 0 25px #1DB954;
+}
+
+/* Mobile adjustment for the widget */
+@media (max-width: 640px) {
+  .spotify-hacked {
+    width: auto;
+    left: 20px;
+    right: 20px;
+    bottom: 15px;
+    transform: scale(0.95); 
+    transform-origin: bottom center;
+  }
+  .spotify-hacked:hover { transform: scale(1); }
+}
+
+/* --- SYSTEM FAILURE ANIMATIONS --- */
+
+/* 1. Global Screen Shake (Used on Canvas) */
+.canvas-glitch {
+  animation: shake 0.1s infinite;
+  filter: contrast(150%) brightness(150%) hue-rotate(90deg);
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+/* 2. Intermittent Button Glitch (Pauses and stutters) */
+@keyframes intermittent-glitch {
+  0%, 85% { transform: translate(0,0) skew(0deg); } /* Stops for most of the time */
+  86% { transform: translate(-2px, 1px) skew(2deg); }
+  88% { transform: translate(1px, -1px) skew(-1deg); }
+  90% { transform: translate(0,0) skew(0deg); }
+  92% { transform: translate(2px, 0) skew(1deg); }
+  94% { transform: translate(-1px, 2px) skew(-2deg); }
+  100% { transform: translate(0,0) skew(0deg); }
+}
+
+/* 3. Heavy Frame Shake (For the main card) */
+@keyframes frame-shake {
+  0%, 90% { transform: translate(0,0); }
+  91% { transform: translate(-1px, 1px); }
+  93% { transform: translate(1px, -1px); }
+  95% { transform: translate(-1px, -1px); }
+  97% { transform: translate(1px, 1px); }
+  100% { transform: translate(0,0); }
+}
+
+/* --- DYNAMIC THEME SWITCHING (GLITCH MODES) --- */
+/* These classes are added by JS when a system failure occurs */
+
+/* MODE 1: BLUE (LATIN) THEME */
+body.glitch-mode-blue .glass-card {
+  border-color: #0088FF;
+  box-shadow: 0 0 15px rgba(0, 136, 255, 0.4);
+  animation: frame-shake 2.5s infinite; 
+}
+body.glitch-mode-blue .profile-avatar {
+  border-color: #0088FF;
+  box-shadow: 0 0 15px #0088FF;
+}
+body.glitch-mode-blue .text-white-glow {
+  text-shadow: 0 0 10px #0088FF;
+}
+
+/* Glitch effects for buttons in Blue mode */
+body.glitch-mode-blue .link-btn,
+body.glitch-mode-blue .spotify-hacked {
+  border-color: #0088FF;
+  color: #0088FF;
+  box-shadow: 0 0 5px #0088FF;
+  animation: intermittent-glitch 2s infinite; 
+}
+body.glitch-mode-blue .link-btn:hover {
+  background: #0088FF;
+  color: black;
+}
+
+/* Footer Fix for Blue Mode */
+body.glitch-mode-blue footer {
+  border-color: rgba(0, 136, 255, 0.5) !important;
+}
+body.glitch-mode-blue footer p, 
+body.glitch-mode-blue footer span {
+  color: #0088FF !important;
+  text-shadow: 0 0 8px #0088FF;
+}
+
+/* MODE 2: RED (MATRIX) THEME */
+body.glitch-mode-red .glass-card {
+  border-color: #FF0000;
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.4);
+  animation: frame-shake 2.5s infinite;
+}
+body.glitch-mode-red .profile-avatar {
+  border-color: #FF0000;
+  box-shadow: 0 0 15px #FF0000;
+}
+body.glitch-mode-red .text-white-glow {
+  text-shadow: 0 0 10px #FF0000;
+}
+
+/* Glitch effects for buttons in Red mode */
+body.glitch-mode-red .link-btn,
+body.glitch-mode-red .spotify-hacked {
+  border-color: #FF0000;
+  color: #FF0000;
+  box-shadow: 0 0 5px #FF0000;
+  animation: intermittent-glitch 2s infinite;
+}
+body.glitch-mode-red .link-btn:hover {
+  background: #FF0000;
+  color: black;
+}
+
+/* Footer Fix for Red Mode */
+body.glitch-mode-red footer {
+  border-color: rgba(255, 0, 0, 0.5) !important;
+}
+body.glitch-mode-red footer p,
+body.glitch-mode-red footer span {
+  color: #FF0000 !important;
+  text-shadow: 0 0 8px #FF0000;
+}
+
+/* Staggering the animations for an organic look */
+.link-btn:nth-child(1) { animation-delay: 0.1s; }
+.link-btn:nth-child(2) { animation-delay: 0.5s; }
+.link-btn:nth-child(3) { animation-delay: 0.0s; }
+.link-btn:nth-child(4) { animation-delay: 0.3s; }
+.link-btn:nth-child(5) { animation-delay: 0.7s; }
+.spotify-hacked { animation-delay: 0.2s; }
