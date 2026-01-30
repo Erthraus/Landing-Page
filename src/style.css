@@ -36,12 +36,21 @@ body {
 .content-wrapper {
   position: relative;
   z-index: 10;
-  min-height: 100vh;
+  
+  /* Takes full viewport height */
+  height: 100vh;
+  width: 100%;
+  
+  /* Enables vertical scrolling */
+  overflow-y: auto;
+  overflow-x: hidden;
+  
+  /* Flexbox for centering */
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2.5rem 1rem;
-  overflow-y: auto; /* Allows scrolling if content is tall */
+  flex-direction: column;
+  
+  /* Padding for mobile edges */
+  padding: 1rem;
 }
 
 /* 2. Glass Card Effect */
@@ -55,6 +64,13 @@ body {
   padding: 1.5rem;
   /* Smooth transition for color changes during glitch */
   transition: all 0.5s ease-in-out;
+
+  /* CENTERING MAGIC: margin: auto centers it vertically & horizontally
+     but allows scrolling if the content is too tall. */
+  margin: auto;
+  
+  /* Extra space at the bottom so the Spotify widget doesn't block the last link */
+  margin-bottom: 120px; 
 }
 @media (min-width: 640px) { .glass-card { padding: 2rem; } }
 
