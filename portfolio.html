@@ -2,44 +2,212 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Work In Progress | Matrix</title>
+  <title>ERTHRAUS | Terminal Access</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+  <link rel="icon" type="image/png" href="assets/pp.png" />
+  
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Old+Turkic&family=VT323&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+  
   <script src="https://cdn.tailwindcss.com"></script>
-
   <link rel="stylesheet" href="src/style.css" />
-
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 </head>
 <body>
 
   <canvas id="matrix-canvas"></canvas>
 
-  <div class="content-wrapper text-center">
-    <div class="glass-card max-w-lg w-full">
-      <i class="fas fa-cogs text-6xl mb-6 animate-spin" style="animation-duration: 3s;"></i>
+  <div class="terminal-wrapper">
+    <div class="terminal-window">
       
-      <h1 class="text-4xl md:text-5xl font-bold mb-4 glitch-text">WORK IN PROGRESS</h1>
-      
-      <p class="text-xl mb-6 opacity-80 tracking-widest">
-        SYSTEM UPGRADE INITIATED...<br>
-        LOADING NEW PORTFOLIO DATA.
-      </p>
-
-      <div class="w-full bg-green-900 h-2 mb-8 rounded overflow-hidden border border-green-500">
-        <div class="bg-green-400 h-full animate-pulse" style="width: 65%"></div>
+      <div class="terminal-header">
+        <div class="header-buttons">
+          <a href="index.html" class="btn-dot red" title="Close / Home"></a>
+          <span class="btn-dot yellow"></span>
+          <span class="btn-dot green"></span>
+        </div>
+        <div class="header-title">user@erthraus: ~/portfolio</div>
       </div>
 
-      <a href="./index.html" class="back-btn">
-        <i class="fas fa-arrow-left mr-2"></i> Return to Mainframe
-      </a>
+      <div id="terminal-output" class="terminal-body">
+        <div class="line">Initializing ERTHRAUS_OS v2.4...</div>
+        <div class="line">Loading kernel modules... <span class="cmd-success">[OK]</span></div>
+        <div class="line">Mounting user data from <span class="cmd-info">Mustafa_Kemal_Oz_CV.pdf</span>... <span class="cmd-success">[GRANTED]</span></div>
+        <br>
+        <div class="line">Welcome to the Construct.</div>
+        <div class="line cmd-muted">Type 'help' to view available commands.</div>
+        <br>
+      </div>
+
+      <div class="input-line">
+        <span class="prompt">➜  ~</span>
+        <input type="text" id="cmd-input" autocomplete="off" spellcheck="false" autofocus>
+      </div>
+
     </div>
   </div>
 
   <script src="src/matrix.js"></script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const input = document.getElementById('cmd-input');
+        const output = document.getElementById('terminal-output');
+        const terminalWindow = document.querySelector('.terminal-window');
+
+        // CV Data extracted from uploaded PDF
+        const cvData = {
+            about: [
+                "IDENTITY: <span class='cmd-info'>Mustafa Kemal Öz</span>",
+                "ROLE: <span class='text-white'>Full Stack & Game Developer</span>",
+                "LOCATION: Ankara, Türkiye",
+                "SUMMARY: Computer Engineering (Honor Student) & Computer Science double major.",
+                "Passionate about Game Development (Unity/C++) and Data Science."
+            ],
+            // Source: [116, 111, 104, 99]
+            experience: [
+                "<span class='cmd-warn'>2024 (Jul-Aug)</span> | <span class='cmd-info'>HAVELSAN</span> - Intern",
+                "<span class='cmd-warn'>2024 (Mar-Jun)</span> | <span class='cmd-info'>TÜBİTAK SAGE</span> - Candidate Researcher",
+                "<span class='cmd-warn'>2023 (Aug-Sep)</span> | <span class='cmd-info'>Gamelab Istanbul</span> - C++ Developer Intern (GlistEngine)",
+                "<span class='cmd-warn'>2022-2023</span>    | <span class='cmd-info'>Çankaya University</span> - Undergraduate Teaching Assistant"
+            ],
+            // Source: [122, 128, 134]
+            education: [
+                "<span class='cmd-warn'>2024-2025</span> | <span class='cmd-info'>Philipps-Universität Marburg</span> - Data Science (Erasmus+)",
+                "<span class='cmd-warn'>2023-Now</span>  | <span class='cmd-info'>Hacettepe University</span> - B.S. Computer Science (GPA: 3.32)",
+                "<span class='cmd-warn'>2021-2023</span> | <span class='cmd-info'>Çankaya University</span> - B.S. Computer Engineering (GPA: 3.68, Full Scholarship)"
+            ],
+            // Source: [172, 165]
+            skills: [
+                "LANGUAGES: <span class='cmd-success'>C, C++, C#, Python, Java, JavaScript</span>",
+                "ENGINES:   <span class='cmd-success'>Unity, GlistEngine</span>",
+                "TOOLS:     <span class='cmd-success'>Git, Adobe Suite (Ps, Pr, Ae)</span>",
+                "SPOKEN:    Turkish (Native), English (C2), German (A2)"
+            ],
+            // Source: [93, 94, 95]
+            contact: [
+                "EMAIL:    <a href='mailto:ozmustafakemal@gmail.com' class='underline hover:text-white'>ozmustafakemal@gmail.com</a>",
+                "LINKEDIN: <a href='https://www.linkedin.com/in/mustafakemaloz/' target='_blank' class='underline hover:text-white'>linkedin.com/in/mustafakemaloz</a>",
+                "GITHUB:   <a href='https://github.com/Erthraus' target='_blank' class='underline hover:text-white'>github.com/Erthraus</a>"
+            ]
+        };
+
+        // --- CORE FUNCTIONS ---
+
+        function handleCommand(cmd) {
+            const cleanCmd = cmd.trim().toLowerCase();
+            
+            // Print the user's command
+            printLine(`<span class="text-green-500">➜ ~</span> ${cmd}`);
+
+            switch (cleanCmd) {
+                case 'help':
+                case 'ls':
+                    printLine("Available Commands:", "cmd-warn");
+                    printLine("  <span class='cmd-info'>about</span>       - Identity & Summary");
+                    printLine("  <span class='cmd-info'>exp</span>         - Work Experience");
+                    printLine("  <span class='cmd-info'>edu</span>         - Education History");
+                    printLine("  <span class='cmd-info'>skills</span>      - Tech Stack & Languages");
+                    printLine("  <span class='cmd-info'>contact</span>     - Contact Links");
+                    printLine("  <span class='cmd-info'>game</span>        - <span class='glitch-text-anim text-red-500'>[LAUNCH SIMULATION]</span> (Interactive Mode)");
+                    printLine("  <span class='cmd-info'>clear</span>       - Clear terminal");
+                    printLine("  <span class='cmd-info'>exit</span>        - Return to Landing Page");
+                    break;
+                
+                case 'about':
+                    cvData.about.forEach(line => printLine(line));
+                    break;
+                
+                case 'exp':
+                case 'experience':
+                    printLine("LOADING WORK HISTORY...", "cmd-muted");
+                    cvData.experience.forEach(line => printLine(`> ${line}`));
+                    break;
+                
+                case 'edu':
+                case 'education':
+                    cvData.education.forEach(line => printLine(`> ${line}`));
+                    break;
+
+                case 'skills':
+                    cvData.skills.forEach(line => printLine(`> ${line}`));
+                    break;
+
+                case 'contact':
+                    cvData.contact.forEach(line => printLine(line));
+                    break;
+                
+                case 'game':
+                case 'start':
+                    printLine("INITIALIZING GAME ENGINE...", "cmd-warn");
+                    printLine("Loading assets... 100%");
+                    printLine("Entering the Matrix...", "cmd-success");
+                    setTimeout(() => {
+                        // Redirect to the Game Page (Next step)
+                        window.location.href = "game.html";
+                    }, 1500);
+                    break;
+
+                case 'clear':
+                    output.innerHTML = "";
+                    break;
+                
+                case 'exit':
+                    window.location.href = "index.html";
+                    break;
+
+                case '':
+                    break;
+
+                default:
+                    printLine(`Command not found: '${cmd}'. Type <span class='cmd-info'>help</span>.`, "cmd-error");
+            }
+            
+            // Scroll to bottom
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function printLine(html, className = "") {
+            const div = document.createElement('div');
+            div.className = `line ${className}`;
+            div.innerHTML = html;
+            output.appendChild(div);
+        }
+
+        // --- EVENT LISTENERS ---
+
+        // Handle Enter Key
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                handleCommand(input.value);
+                input.value = '';
+            }
+        });
+
+        // Keep focus on input when clicking anywhere in terminal
+        terminalWindow.addEventListener('click', () => {
+            input.focus();
+        });
+
+        // --- AUTO TYPE ANIMATION ---
+        // Simulates typing 'help' on page load
+        function autoType(text, index = 0) {
+            if (index < text.length) {
+                input.value += text.charAt(index);
+                setTimeout(() => autoType(text, index + 1), 150); 
+            } else {
+                setTimeout(() => {
+                    handleCommand(text);
+                    input.value = "";
+                }, 400);
+            }
+        }
+
+        // Start auto-typing after a delay
+        setTimeout(() => {
+            autoType("help");
+        }, 1000);
+    });
+  </script>
 </body>
 </html>
