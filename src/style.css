@@ -506,3 +506,130 @@ body.glitch-mode-red footer span {
     max-width: calc(100vw - 40px);
   }
 }
+
+/* --- TERMINAL PAGE STYLES --- */
+
+.terminal-wrapper {
+  position: relative;
+  z-index: 10;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.terminal-window {
+  width: 100%;
+  max-width: 900px;
+  height: 80vh;
+  background-color: rgba(13, 17, 23, 0.95); /* Dark Github-like background */
+  border: 1px solid #30363d;
+  border-radius: 8px;
+  box-shadow: 0 0 40px rgba(0, 255, 65, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: 'VT323', monospace;
+  font-size: 1.2rem;
+  text-align: left; /* Terminal text is always left-aligned */
+}
+
+/* Terminal Header (Mac/Linux style) */
+.terminal-header {
+  background-color: #161b22;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #30363d;
+}
+
+.header-buttons {
+  display: flex;
+  gap: 8px;
+  margin-right: 15px;
+}
+
+.btn-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+.red { background-color: #ff5f56; }
+.yellow { background-color: #ffbd2e; }
+.green { background-color: #27c93f; }
+
+.header-title {
+  color: #8b949e;
+  font-size: 1rem;
+  flex-grow: 1;
+  text-align: center;
+  opacity: 0.8;
+  font-family: sans-serif;
+}
+
+/* Terminal Body */
+.terminal-body {
+  flex-grow: 1;
+  padding: 20px;
+  overflow-y: auto;
+  color: #c9d1d9; /* Soft white text */
+  scrollbar-width: thin;
+  scrollbar-color: var(--matrix-green) #161b22;
+}
+
+.line {
+  margin-bottom: 6px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+/* Input Area */
+.input-line {
+  display: flex;
+  align-items: center;
+  padding: 10px 20px 20px 20px;
+  background-color: rgba(13, 17, 23, 0.95);
+}
+
+.prompt {
+  color: var(--matrix-green);
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+#cmd-input {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-family: 'VT323', monospace;
+  font-size: 1.2rem;
+  flex-grow: 1;
+  outline: none;
+}
+
+/* Command Colors */
+.cmd-success { color: #00ff41; }
+.cmd-error { color: #ff5f56; }
+.cmd-info { color: #58a6ff; }
+.cmd-warn { color: #f1e05a; }
+.cmd-muted { color: #8b949e; }
+
+/* Glitch Animation for the 'Game' command */
+.glitch-text-anim {
+  animation: glitch-anim 0.5s infinite;
+  font-weight: bold;
+}
+
+@keyframes glitch-anim {
+  0% { text-shadow: 2px 0 #ff00c1, -2px 0 #00fff9; }
+  25% { text-shadow: -2px 0 #ff00c1, 2px 0 #00fff9; }
+  50% { text-shadow: 2px 0 #ff00c1, -2px 0 #00fff9; }
+  75% { text-shadow: -2px 0 #ff00c1, 2px 0 #00fff9; }
+  100% { text-shadow: 2px 0 #ff00c1, -2px 0 #00fff9; }
+}
+
+/* Scrollbar styling for Webkit */
+.terminal-body::-webkit-scrollbar { width: 8px; }
+.terminal-body::-webkit-scrollbar-track { background: #161b22; }
+.terminal-body::-webkit-scrollbar-thumb { background: #30363d; border-radius: 4px; }
