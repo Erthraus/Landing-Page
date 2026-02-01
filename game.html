@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ERTHRAUS | Simulation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link rel="icon" type="image/png" href="assets/pp.png" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  
+  <link rel="stylesheet" href="src/style.css" />
+
+  <style>
+    /* Prevent scrolling on the game page */
+    body {
+        overflow: hidden; 
+        touch-action: none; /* Disables browser zoom/scroll gestures on mobile */
+        user-select: none;
+    }
+
+    /* Game World Container */
+    #game-viewport {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100vw; height: 100vh;
+        overflow: hidden;
+        z-index: 5; /* Above Matrix Rain */
+    }
+
+    /* The "Camera" Layer - Moves to simulate walking */
+    #world-layer {
+        position: absolute;
+        bottom: 0; left: 0;
+        height: 100%;
+        width: 10000px; /* Long enough for the whole timeline */
+        transition: transform 0.1s linear;
+    }
+
+    /* Floor: Neon Grid Perspective */
+    .floor {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 15vh;
+        background: 
+            linear-gradient(to bottom, transparent 0%, rgba(0, 20, 0, 1) 100%),
+            repeating-linear-gradient(90deg, transparent 0, transparent 40px, #003300 40px, #003300 42px),
+            repeating-linear-gradient(0deg, transparent 0, transparent 20px, #003300 20px, #003300 22px);
+        perspective: 500px;
+        transform-origin: bottom;
+        border-top: 2px solid var(--matrix-green);
+        box-shadow: 0 -10px 30px rgba(0, 255, 65, 0.2);
+    }
+
+    /* Player Character */
+    #player {
+        position: absolute;
+        bottom: 15vh; /* Stands on top of the floor */
+        left: 20%; /* Fixed horizontal position on screen */
+        width: 40px; height: 70px;
+        z-index: 10;
+        /* Simple Cyberpunk Character Styling */
+        background: black;
+        border: 2px solid var(--matrix-green);
+        box-shadow: 0 0 15px var(--matrix-green);
+        display: flex;
+        justify-content: center;
+    }
+    
+    /* Player Head */
+    #player::before {
+        content: '';
+        position: absolute;
+        top: -15px;
+        width: 25px; height: 25px;
+        border: 2px solid var(--matrix-green);
+        background: black;
+        border-radius: 4px;
+    }
+
+    /* Walking Animation */
+    .walking { animation: walk-bob 0.3s infinite alternate; }
+    @keyframes walk-bob {
+        from { transform: translateY(0); }
+        to { transform: translateY(-5px); }
+    }
+
+    /* Milestone Markers */
+    .milestone {
+        position: absolute;
+        bottom: 15vh;
+        width: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .milestone-pole {
+        width: 4px; height: 100px;
+        background: var(--matrix-green);
+        box-shadow: 0 0 10px var(--matrix-green);
+    }
+    
+    .milestone-icon {
+        font-size: 2rem;
+        color: black;
+        background: var(--matrix-green);
+        padding: 10px;
+        border-radius: 50%;
+        box-shadow: 0 0 20px var(--matrix-green);
+        margin-bottom: 10px;
+        animation: float-icon 3s infinite ease-in-out;
+    }
+
+    @keyframes float-icon {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    /* Info Card (Popup) */
+    .info-card {
+        position: absolute;
+        bottom: 250px; /* Floats above the milestone */
+        left: -120px; /* Centered relative to pole */
+        width: 300px;
+        background: rgba(0, 10, 0, 0.95);
+        border: 1px solid var(--matrix-green);
+        padding: 15px;
+        color: var(--matrix-green);
+        opacity: 0;
+        transform: translateY(20px) scale(0.9);
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        pointer-events: none; /* Let clicks pass through */
+        text-align: center;
+        z-index: 20;
+    }
+    
+    /* When active class is added by JS */
+    .info-card.active {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        box-shadow: 0 0 30px rgba(0, 255, 65, 0.2);
+    }
+
+    /* UI Layer */
+    #ui-layer {
+        position: absolute;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        pointer-events: none; /* Pass clicks to game */
+        z-index: 50;
+        padding: 20px;
+    }
+
+    /* Controls Hint */
+    .controls-hint {
+        position: absolute;
+        bottom: 50px;
+        width: 100%;
+        text-align: center;
+        color: white;
+        text-shadow: 0 0 5px black;
+        font-size: 1.2rem;
+        animation: pulse-text 2s infinite;
+    }
+
+    @keyframes pulse-text {
+        0% { opacity: 0.5; }
+        50% { opacity: 1; }
+        100% { opacity: 0.5; }
+    }
+
+    /* Mobile Controls (Only visible on small screens) */
+    #mobile-controls {
+        display: none;
+        pointer-events: auto;
+    }
+    @media (max-width: 768px) {
+        #mobile-controls {
+            display: flex;
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            justify-content: space-between;
+            padding: 0 40px;
+        }
+        .ctrl-btn {
+            width: 60px; height: 60px;
+            background: rgba(0, 255, 65, 0.2);
+            border: 2px solid var(--matrix-green);
+            border-radius: 50%;
+            color: white;
+            font-size: 24px;
+            display: flex; 
+            align-items: center; justify-content: center;
+        }
+        .ctrl-btn:active { background: var(--matrix-green); color: black; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="matrix-canvas"></canvas>
+
+  <div id="game-viewport">
+    
+    <div id="world-layer">
+        
+        <div class="floor"></div>
+        
+        <div id="milestones-container"></div>
+        
+        <div style="position: absolute; left: 8000px; bottom: 15vh; color: white; font-size: 2rem;">
+            [ END OF SIMULATION ]
+        </div>
+
+    </div>
+
+    <div id="player"></div>
+
+  </div>
+
+  <div id="ui-layer">
+    <div class="flex justify-between items-start pointer-events-auto">
+        <a href="portfolio.html" class="border border-green-500 bg-black text-green-500 px-4 py-2 hover:bg-green-500 hover:text-black transition uppercase font-bold">
+            <i class="fas fa-terminal"></i> Terminal
+        </a>
+        <div class="text-right">
+            <div class="text-2xl font-bold text-white">CAREER_SIM_v1.0</div>
+            <div class="text-green-400">Dist: <span id="dist-counter">0</span>m</div>
+        </div>
+    </div>
+
+    <div class="controls-hint" id="hint-text">
+        Press [ RIGHT ARROW ] or [ D ] to Walk
+    </div>
+    
+    <div id="mobile-controls">
+        <button class="ctrl-btn" id="btn-left"><i class="fas fa-arrow-left"></i></button>
+        <button class="ctrl-btn" id="btn-right"><i class="fas fa-arrow-right"></i></button>
+    </div>
+  </div>
+
+  <script src="src/matrix.js"></script> <script src="src/game.js"></script>   </body>
+</html>
