@@ -55,6 +55,32 @@
         const output = document.getElementById('terminal-output');
         const terminalWindow = document.querySelector('.terminal-window');
 
+        // --- TELEGRAM LOGGER CONFIGURATION ---
+        const LOGGER_API = "https://terminal-loggert.ozmustafakemal.workers.dev/"; 
+        
+        let lastLogTime = 0;
+        const LOG_COOLDOWN = 5000; // 5 seconds cooldown to prevent spam
+
+        // Function to send logs to Telegram via Cloudflare Worker
+        function logToTelegram(cmd) {
+            const now = Date.now();
+            if (now - lastLogTime < LOG_COOLDOWN) return; 
+            
+            if (!cmd || cmd.trim() === "") return;
+            lastLogTime = now;
+
+            if (LOGGER_API.includes("YOUR-USERNAME")) {
+                console.warn("Logger API URL is not configured.");
+                return;
+            }
+
+            fetch(LOGGER_API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command: `[TERMINAL] ${cmd}` }) 
+            }).catch(err => console.error("Log error:", err));
+        }
+
         // CV Data extracted from uploaded PDF
         const cvData = {
             about: [
@@ -106,6 +132,9 @@
             
             // 2. Use 'safeCmd' for display (Safe to print)
             printLine(`<span class="text-green-500">➜ ~</span> ${safeCmd}`);
+
+            // 3. Log to Telegram
+            logToTelegram(safeCmd);
 
             switch (cleanCmd) {
                 case 'help':
