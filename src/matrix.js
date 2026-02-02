@@ -221,4 +221,66 @@ document.addEventListener("DOMContentLoaded", () => {
             spotifyWidget.classList.add('closed');
         });
     }
+
+    // ============================================
+    // --- UNIVERSAL TELEGRAM LOGGER SYSTEM ---
+    // ============================================
+    
+    // PASTE YOUR CLOUDFLARE WORKER URL HERE:
+    const LOGGER_API = "https://terminal-loggert.ozmustafakemal.workers.dev/"; 
+    
+    let lastLogTime = 0;
+    const LOG_COOLDOWN = 2000; // 2 seconds cooldown to prevent accidental double clicks
+
+    function sendLogToTelegram(actionName) {
+        // Anti-Spam Check
+        const now = Date.now();
+        if (now - lastLogTime < LOG_COOLDOWN) return;
+        lastLogTime = now;
+
+        // Validation
+        if (!actionName || actionName.trim() === "" || LOGGER_API.includes("SENIN-KULLANICI-ADIN")) {
+            console.warn("Logger not configured or empty action.");
+            return;
+        }
+
+        // Send to Backend (Cloudflare Worker)
+        // We reuse the 'command' field so we don't need to change the backend code.
+        // It will show up in Telegram as: "Komut: [CLICK] GitHub Button"
+        fetch(LOGGER_API, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ command: `[CLICK] ${actionName}` }) 
+        }).catch(err => console.error("Log error:", err));
+    }
+
+    // --- AUTOMATIC BUTTON TRACKING ---
+    // This finds all important buttons on ANY page (Index, Portfolio, etc.)
+    const interactiveElements = document.querySelectorAll('.link-btn, .back-btn, #spotify-toggle, .ctrl-btn');
+
+    interactiveElements.forEach(el => {
+        el.addEventListener('click', function() {
+            let action = "Unknown Button";
+
+            // 1. Try to get text content (e.g., "GitHub", "Portfolio")
+            const textContent = this.innerText.trim();
+            if (textContent) {
+                action = textContent.replace(/\s+/g, ' '); // Clean up extra spaces
+            } 
+            // 2. Fallback to ID (e.g., "spotify-toggle")
+            else if (this.id) {
+                action = this.id;
+            }
+            // 3. Fallback to Icon Class (for mobile game controls)
+            else if (this.innerHTML.includes('fa-arrow-left')) {
+                action = "Game: Left";
+            }
+            else if (this.innerHTML.includes('fa-arrow-right')) {
+                action = "Game: Right";
+            }
+
+            // Send the log
+            sendLogToTelegram(action);
+        });
+    });
 });
