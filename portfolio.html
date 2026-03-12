@@ -5,10 +5,26 @@
   <title>ERTHRAUS | Terminal Access</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="assets/pp.png" />
-  
+
+  <!-- SEO -->
+  <meta name="description" content="Mustafa Kemal Öz (ERTHRAUS) – CS Student & Game Developer. Interactive terminal portfolio with career history, skills, and projects." />
+  <meta name="keywords" content="Mustafa Kemal Öz, ERTHRAUS, Game Developer, Unity, C++, Portfolio, Terminal" />
+  <meta name="author" content="Mustafa Kemal Öz" />
+  <meta name="theme-color" content="#000000" />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="ERTHRAUS | Terminal Portfolio" />
+  <meta property="og:description" content="Interactive terminal portfolio of Mustafa Kemal Öz – CS Student & Game Developer." />
+  <meta property="og:url" content="https://erthraus.dev/portfolio.html" />
+  <meta property="og:image" content="https://erthraus.dev/assets/pp.png" />
+
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data:; connect-src https://terminal-loggert.ozmustafakemal.workers.dev; frame-src https://open.spotify.com;" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-  
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="src/style.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
@@ -85,38 +101,52 @@
         const cvData = {
             about: [
                 "IDENTITY: <span class='cmd-info'>Mustafa Kemal Öz</span>",
-                "ROLE: <span class='text-white'>Full Stack & Game Developer</span>",
+                "ROLE: <span class='text-white'>CS Student / Game Developer</span>",
                 "LOCATION: Ankara, Türkiye",
-                "SUMMARY: Computer Engineering (Honor Student) & Computer Science double major.",
-                "Passionate about Game Development (Unity/C++) and Data Science."
+                "SUMMARY: B.S. Computer Science at Hacettepe University (transferred from Çankaya CENG).",
+                "XR Product Developer at VR Akademi (ODTÜ Teknokent). Passionate about Game Development."
             ],
-            // Source: [116, 111, 104, 99]
             experience: [
+                "<span class='cmd-warn'>2025-Now</span>       | <span class='cmd-info'>VR Akademi (ETKİM, ODTÜ Teknokent)</span> - XR Product Developer",
+                "                    Immersive XR product development & entrepreneurship.",
                 "<span class='cmd-warn'>2024 (Jul-Aug)</span> | <span class='cmd-info'>HAVELSAN</span> - Intern",
+                "                    Developed automated testing tool using C++ and Qt framework in an agile environment.",
                 "<span class='cmd-warn'>2024 (Mar-Jun)</span> | <span class='cmd-info'>TÜBİTAK SAGE</span> - Candidate Researcher",
-                "<span class='cmd-warn'>2023 (Aug-Sep)</span> | <span class='cmd-info'>Gamelab Istanbul</span> - C++ Developer Intern (GlistEngine)",
-                "<span class='cmd-warn'>2022-2023</span>    | <span class='cmd-info'>Çankaya University</span> - Undergraduate Teaching Assistant"
+                "                    Software testing methodologies research and orientation.",
+                "<span class='cmd-warn'>2023 (Aug-Sep)</span> | <span class='cmd-info'>Gamelab İstanbul</span> - C++ Developer Intern",
+                "                    Implemented C++ class methods for GlistEngine. Debugging & optimization.",
+                "<span class='cmd-warn'>2022-2023</span>      | <span class='cmd-info'>Çankaya University</span> - Undergraduate Teaching Assistant",
+                "                    Coordinated assistants, evaluated assignments, mentored students in coding labs."
             ],
-            // Source: [122, 128, 134]
             education: [
-                "<span class='cmd-warn'>2024-2025</span> | <span class='cmd-info'>Philipps-Universität Marburg</span> - Data Science (Erasmus+)",
-                "<span class='cmd-warn'>2023-Now</span>  | <span class='cmd-info'>Hacettepe University</span> - B.S. Computer Science (GPA: 3.32)",
-                "<span class='cmd-warn'>2021-2023</span> | <span class='cmd-info'>Çankaya University</span> - B.S. Computer Engineering (GPA: 3.68, Full Scholarship)"
+                "<span class='cmd-warn'>Oct 2024 – Jul 2025</span> | <span class='cmd-info'>Philipps-Universität Marburg</span> - Data Science (Erasmus+)",
+                "<span class='cmd-warn'>Sept 2023–Now</span>       | <span class='cmd-info'>Hacettepe University</span> - B.S. Computer Science",
+                "<span class='cmd-warn'>Sept 2021–2023</span>      | <span class='cmd-info'>Çankaya University</span> - B.S. Computer Engineering (GPA: 3.68, Full Scholarship)"
             ],
-            // Source: [172, 165]
             skills: [
-                "LANGUAGES: <span class='cmd-success'>C, C++, C#, Python, Java, JavaScript</span>",
+                "LANGUAGES: <span class='cmd-success'>C, C++, C#, Python, Java</span>",
                 "ENGINES:   <span class='cmd-success'>Unity, GlistEngine</span>",
-                "TOOLS:     <span class='cmd-success'>Git, Adobe Suite (Ps, Pr, Ae)</span>",
+                "TOOLS:     <span class='cmd-success'>Git / GitHub</span>",
                 "SPOKEN:    Turkish (Native), English (C2), German (A2)"
             ],
-            // Source: [93, 94, 95]
+            projects: [],
+            hobbies: [
+                "🥋 Taekwondo (Black Belt)",
+                "🐴 Horse Riding",
+                "🎲 Tabletop RPGs (D&amp;D)",
+                "🎸 Playing Guitar",
+                "🤘 Metal Music"
+            ],
             contact: [
                 "EMAIL:    <a href='mailto:ozmustafakemal@gmail.com' class='underline hover:text-white'>ozmustafakemal@gmail.com</a>",
                 "LINKEDIN: <a href='https://www.linkedin.com/in/mustafakemaloz/' target='_blank' class='underline hover:text-white'>linkedin.com/in/mustafakemaloz</a>",
                 "GITHUB:   <a href='https://github.com/Erthraus' target='_blank' class='underline hover:text-white'>github.com/Erthraus</a>"
             ]
         };
+
+        // --- KEYBOARD HISTORY ---
+        let cmdHistory = [];
+        let historyIndex = -1;
 
         // --- CORE FUNCTIONS ---
 
@@ -141,15 +171,24 @@
                 case 'ls':
                     printLine("Available Commands:", "cmd-warn");
                     printLine("  <span class='cmd-info'>about</span>       - Identity & Summary");
+                    printLine("  <span class='cmd-info'>whoami</span>      - Quick identity snapshot");
                     printLine("  <span class='cmd-info'>exp</span>         - Work Experience");
                     printLine("  <span class='cmd-info'>edu</span>         - Education History");
                     printLine("  <span class='cmd-info'>skills</span>      - Tech Stack & Languages");
+                    printLine("  <span class='cmd-info'>projects</span>    - Notable Projects");
+                    printLine("  <span class='cmd-info'>hobbies</span>     - Outside the Matrix");
                     printLine("  <span class='cmd-info'>contact</span>     - Contact Links");
+                    printLine("  <span class='cmd-info'>cv</span>          - Download / View CV");
                     printLine("  <span class='cmd-info'>game</span>        - <span class='glitch-text-anim text-red-500'>[LAUNCH SIMULATION]</span> (Interactive Mode)");
                     printLine("  <span class='cmd-info'>clear</span>       - Clear terminal");
                     printLine("  <span class='cmd-info'>exit</span>        - Return to Landing Page");
                     break;
                 
+                case 'whoami':
+                    printLine("<span class='cmd-info'>Mustafa Kemal Öz</span> — CS Student / Game Developer");
+                    printLine("Hacettepe University · VR Akademi (ODTÜ Teknokent)");
+                    break;
+
                 case 'about':
                     cvData.about.forEach(line => printLine(line));
                     break;
@@ -169,17 +208,33 @@
                     cvData.skills.forEach(line => printLine(`> ${line}`));
                     break;
 
+                case 'projects':
+                    printLine("NOTABLE PROJECTS:", "cmd-muted");
+                    cvData.projects.forEach(line => printLine(`> ${line}`));
+                    break;
+
+                case 'hobbies':
+                case 'interests':
+                    printLine("OUTSIDE THE MATRIX:", "cmd-muted");
+                    cvData.hobbies.forEach(line => printLine(`  ${line}`));
+                    break;
+
                 case 'contact':
                     cvData.contact.forEach(line => printLine(line));
                     break;
                 
+                case 'cv':
+                case 'download':
+                    printLine("Opening CV...", "cmd-success");
+                    window.open('assets/CV_MustafaKemal.pdf', '_blank');
+                    break;
+
                 case 'game':
                 case 'start':
                     printLine("INITIALIZING GAME ENGINE...", "cmd-warn");
                     printLine("Loading assets... 100%");
                     printLine("Entering the Matrix...", "cmd-success");
                     setTimeout(() => {
-                        // Redirect to the Game Page (Next step)
                         window.location.href = "game.html";
                     }, 1500);
                     break;
@@ -196,7 +251,7 @@
                     break;
 
                 default:
-                    printLine(`Command not found: '${cmd}'. Type <span class='cmd-info'>help</span>.`, "cmd-error");
+                    printLine(`Command not found: '${safeCmd}'. Type <span class='cmd-info'>help</span>.`, "cmd-error");
             }
             
             // Scroll to bottom
@@ -212,11 +267,40 @@
 
         // --- EVENT LISTENERS ---
 
-        // Handle Enter Key
+        // Handle Enter Key, Keyboard History & Tab Completion
+        const allCommands = ['about', 'whoami', 'exp', 'experience', 'edu', 'education', 'skills', 'projects', 'hobbies', 'interests', 'contact', 'cv', 'download', 'game', 'start', 'clear', 'exit', 'help', 'ls'];
+
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
                 handleCommand(input.value);
                 input.value = '';
+                historyIndex = -1;
+            } else if (e.key === 'Tab') {
+                e.preventDefault();
+                const partial = input.value.trim().toLowerCase();
+                if (partial === '') return;
+                const matches = allCommands.filter(c => c.startsWith(partial));
+                if (matches.length === 1) {
+                    input.value = matches[0];
+                } else if (matches.length > 1) {
+                    printLine(`<span class='cmd-muted'>Possible: ${matches.join('  ')}</span>`);
+                    output.scrollTop = output.scrollHeight;
+                }
+            } else if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (cmdHistory.length > 0) {
+                    historyIndex = Math.min(historyIndex + 1, cmdHistory.length - 1);
+                    input.value = cmdHistory[historyIndex];
+                }
+            } else if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    input.value = cmdHistory[historyIndex];
+                } else {
+                    historyIndex = -1;
+                    input.value = '';
+                }
             }
         });
 

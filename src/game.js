@@ -9,6 +9,10 @@ document.addEventListener("DOMContentLoaded", () => {
         triggerDist: 200    // Distance to trigger popup info
     };
 
+
+    // World bounds constant
+    const WORLD_START = 800;
+
     // --- CV DATA (MILESTONES) ---
     // Extracted from your PDF
     const careerPath = [
@@ -32,8 +36,8 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         {
             year: "2023",
-            title: "Transfer to Hacettepe University",
-            desc: "Started B.S. Computer Science at Hacettepe University.",
+            title: "Transfer to Hacettepe",
+            desc: "Transferred from Çankaya CENG to B.S. Computer Science at Hacettepe University.",
             icon: "fa-graduation-cap"
         },
         {
@@ -53,8 +57,17 @@ document.addEventListener("DOMContentLoaded", () => {
             title: "Erasmus in Germany",
             desc: "Data Science program at Philipps-Universität Marburg.",
             icon: "fa-plane-departure"
+        },
+        {
+            year: "2025-Now",
+            title: "XR Product Developer",
+            desc: "XR Product Developer & Entrepreneur at VR Akademi (ETKİM, ODTÜ Teknokent). Building immersive XR experiences.",
+            icon: "fa-vr-cardboard"
         }
     ];
+
+    // Dynamically calculate max position from careerPath
+    const MAX_POSITION = WORLD_START + (careerPath.length - 1) * config.milestoneGap + 400;
 
     // --- DOM ELEMENTS ---
     const world = document.getElementById('world-layer');
@@ -68,9 +81,13 @@ document.addEventListener("DOMContentLoaded", () => {
     let isMovingLeft = false;
     let isMovingRight = false;
     let animationId;
+    let hasReachedEnd = false; // Track if player hit the end
     
     // --- INITIALIZATION ---
     function init() {
+        // Set world-layer width dynamically
+        const worldLayer = document.getElementById('world-layer');
+        if (worldLayer) worldLayer.style.width = (MAX_POSITION + window.innerWidth) + 'px';
         renderMilestones();
         gameLoop();
     }
@@ -117,23 +134,25 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e.key === "ArrowLeft" || e.key === "a") isMovingLeft = false;
     });
 
-    // Mobile Touch
+    // Mobile Controls — pointer events work on both touch & mouse
     const btnLeft = document.getElementById('btn-left');
     const btnRight = document.getElementById('btn-right');
 
     if (btnLeft && btnRight) {
-        btnLeft.addEventListener('touchstart', (e) => { e.preventDefault(); isMovingLeft = true; hintText.style.display = 'none'; });
-        btnLeft.addEventListener('touchend', (e) => { e.preventDefault(); isMovingLeft = false; });
-        
-        btnRight.addEventListener('touchstart', (e) => { e.preventDefault(); isMovingRight = true; hintText.style.display = 'none'; });
-        btnRight.addEventListener('touchend', (e) => { e.preventDefault(); isMovingRight = false; });
+        btnLeft.addEventListener('pointerdown', (e) => { e.preventDefault(); isMovingLeft = true; hintText.style.display = 'none'; });
+        btnLeft.addEventListener('pointerup',   (e) => { e.preventDefault(); isMovingLeft = false; });
+        btnLeft.addEventListener('pointerleave',(e) => { isMovingLeft = false; });
+
+        btnRight.addEventListener('pointerdown', (e) => { e.preventDefault(); isMovingRight = true; hintText.style.display = 'none'; });
+        btnRight.addEventListener('pointerup',   (e) => { e.preventDefault(); isMovingRight = false; });
+        btnRight.addEventListener('pointerleave',(e) => { isMovingRight = false; });
     }
 
     // --- GAME LOOP ---
     function gameLoop() {
-        // 1. Update Position
-        if (isMovingRight) {
-            position += config.speed;
+        // 1. Update Position (clamped to world bounds)
+        if (isMovingRight && position < MAX_POSITION) {
+            position = Math.min(position + config.speed, MAX_POSITION);
             player.classList.add('walking');
             player.style.transform = "scaleX(1)"; // Face Right
         } else if (isMovingLeft && position > 0) {
@@ -142,6 +161,16 @@ document.addEventListener("DOMContentLoaded", () => {
             player.style.transform = "scaleX(-1)"; // Face Left
         } else {
             player.classList.remove('walking');
+        }
+
+        // Check if player reached the end → auto-redirect to terminal
+        if (position >= MAX_POSITION && !hasReachedEnd) {
+            hasReachedEnd = true;
+            hintText.style.display = 'block';
+            hintText.innerHTML = 'SIMULATION COMPLETE — Returning to Terminal...';
+            setTimeout(() => {
+                window.location.href = 'portfolio.html';
+            }, 3000);
         }
 
         // 2. Move World (Camera Effect)
