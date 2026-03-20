@@ -129,7 +129,9 @@
                 "TOOLS:     <span class='cmd-success'>Git / GitHub</span>",
                 "SPOKEN:    Turkish (Native), English (C2), German (A2)"
             ],
-            projects: [],
+            projects: [
+                "YT MANAGER: <a href='https://yt.erthraus.dev' target='_blank' class='underline hover:text-white'>yt.erthraus.dev</a> - YouTube Playlist Manager"
+            ],
             hobbies: [
                 "🥋 Taekwondo (Black Belt)",
                 "🐴 Horse Riding",
@@ -178,6 +180,7 @@
                     printLine("  <span class='cmd-info'>projects</span>    - Notable Projects");
                     printLine("  <span class='cmd-info'>hobbies</span>     - Outside the Matrix");
                     printLine("  <span class='cmd-info'>contact</span>     - Contact Links");
+                    printLine("  <span class='cmd-info'>yt</span>          - Launch YT Manager");
                     printLine("  <span class='cmd-info'>cv</span>          - Download / View CV");
                     printLine("  <span class='cmd-info'>game</span>        - <span class='glitch-text-anim text-red-500'>[LAUNCH SIMULATION]</span> (Interactive Mode)");
                     printLine("  <span class='cmd-info'>clear</span>       - Clear terminal");
@@ -223,6 +226,11 @@
                     cvData.contact.forEach(line => printLine(line));
                     break;
                 
+                case 'yt':
+                    printLine("Opening YT Manager...", "cmd-success");
+                    window.open('https://yt.erthraus.dev', '_blank');
+                    break;
+
                 case 'cv':
                 case 'download':
                     printLine("Opening CV...", "cmd-success");
@@ -268,7 +276,7 @@
         // --- EVENT LISTENERS ---
 
         // Handle Enter Key, Keyboard History & Tab Completion
-        const allCommands = ['about', 'whoami', 'exp', 'experience', 'edu', 'education', 'skills', 'projects', 'hobbies', 'interests', 'contact', 'cv', 'download', 'game', 'start', 'clear', 'exit', 'help', 'ls'];
+        const allCommands = ['about', 'whoami', 'exp', 'experience', 'edu', 'education', 'skills', 'projects', 'hobbies', 'interests', 'contact', 'yt', 'cv', 'download', 'game', 'start', 'clear', 'exit', 'help', 'ls'];
 
         input.addEventListener('keydown', (e) => {
             if (e.key === 'Enter') {
