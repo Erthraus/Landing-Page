@@ -83,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { x: 3350, y: GL - 130, w: 110, h: 16, solid: false },
     { x: 3600, y: GL, w: 700, h: 100, solid: true },
     { x: 3750, y: GL - 110, w: 100, h: 16, solid: false },
-    { x: 3750, y: GL - 220, w: 100, h: 16, solid: false },
+    { x: 3900, y: GL - 220, w: 100, h: 16, solid: false },
 
     // ══ SEC 4: Hacettepe ══
     { x: 4500, y: GL, w: 500, h: 100, solid: true },
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // (moving platforms added separately below)
     { x: 6900, y: GL, w: 600, h: 100, solid: true },
     { x: 6950, y: GL - 120, w: 100, h: 16, solid: false },
-    { x: 6950, y: GL - 240, w: 120, h: 16, solid: false },
+    { x: 7100, y: GL - 240, w: 120, h: 16, solid: false },
     { x: 6950, y: GL - 340, w: 120, h: 16, solid: false },
 
     // ══ SEC 6: Erasmus (tricky alternating) ══
@@ -109,14 +109,14 @@ document.addEventListener("DOMContentLoaded", () => {
     // (moving platform below)
     { x: 8900, y: GL, w: 700, h: 100, solid: true },
     { x: 8950, y: GL - 130, w: 100, h: 16, solid: false },
-    { x: 8950, y: GL - 260, w: 120, h: 16, solid: false },
+    { x: 9100, y: GL - 260, w: 120, h: 16, solid: false },
 
     // ══ SEC 7: XR (hardest) ══
     { x: 9800, y: GL - 50, w: 100, h: 16, solid: false },
     // (moving platforms below)
     { x: 10300, y: GL, w: 500, h: 100, solid: true },
     { x: 10400, y: GL - 110, w: 90, h: 16, solid: false },
-    { x: 10400, y: GL - 220, w: 90, h: 16, solid: false },
+    { x: 10550, y: GL - 220, w: 90, h: 16, solid: false },
     { x: 10400, y: GL - 330, w: 100, h: 16, solid: false },
     // Final ground
     { x: 10950, y: GL, w: 1200, h: 100, solid: true },
@@ -126,13 +126,13 @@ document.addEventListener("DOMContentLoaded", () => {
   const movingPlatforms = [
     // SEC 5: horizontal ferry over gap
     {
-      x: 6600,
+      x: 6725,
       y: GL - 60,
       w: 110,
       h: 16,
       type: "hori",
-      ox: 6550,
-      range: 250,
+      ox: 6725,
+      range: 125,
       speed: 1.5,
       phase: 0,
     },
@@ -150,13 +150,13 @@ document.addEventListener("DOMContentLoaded", () => {
     },
     // SEC 7: horizontal ferry 1
     {
-      x: 9950,
+      x: 10025,
       y: GL - 130,
       w: 100,
       h: 16,
       type: "hori",
-      ox: 9900,
-      range: 300,
+      ox: 10025,
+      range: 100,
       speed: 2,
       phase: 0,
     },
@@ -238,7 +238,7 @@ document.addEventListener("DOMContentLoaded", () => {
     { id: "Py", x: 5500, y: GL - 80 },
     { id: "Linux", x: 7010, y: GL - 410 },
     { id: "Data", x: 7900, y: GL - 80 },
-    { id: "ML", x: 9010, y: GL - 330 },
+    { id: "ML", x: 9040, y: GL - 330 },
     { id: "Unity", x: 9500, y: GL - 80 },
     { id: "C#", x: 10460, y: GL - 400 },
   ].map((s) => ({ ...s, collected: false }));
@@ -326,7 +326,7 @@ document.addEventListener("DOMContentLoaded", () => {
       w: 36,
       h: 36,
       vx: 2.5,
-      platIdx: 20,
+      platIdx: 19,
       offL: 50,
       offR: 450,
       alive: true,
@@ -358,7 +358,7 @@ document.addEventListener("DOMContentLoaded", () => {
       w: 36,
       h: 36,
       vx: 3,
-      platIdx: 28,
+      platIdx: 27,
       offL: 50,
       offR: 550,
       alive: true,
@@ -754,18 +754,33 @@ document.addEventListener("DOMContentLoaded", () => {
       ctx.save();
       ctx.translate(sx, 0);
 
-      // Draw as thin platform with special color
-      ctx.fillStyle =
-        mp.type === "fall" ? "rgba(255,100,0,0.15)" : "rgba(0,180,255,0.15)";
+      // Draw as robust translucent platform
+      const baseColor = mp.type === "fall" ? "255, 120, 0" : "0, 200, 255";
+      const edgeColor = mp.type === "fall" ? "255, 100, 0" : "0, 180, 255";
+      
+      // Core fill
+      ctx.fillStyle = `rgba(${baseColor}, 0.25)`;
       ctx.fillRect(mp.x, mp.y, mp.w, mp.h || 16);
-      ctx.strokeStyle = mp.type === "fall" ? "#f80" : "#0af";
+      
+      // Solid outer border
+      ctx.strokeStyle = `rgba(${edgeColor}, 0.9)`;
       ctx.lineWidth = 2;
-      ctx.setLineDash([6, 5]);
+      ctx.strokeRect(mp.x, mp.y, mp.w, mp.h || 16);
+      
+      // Metal/tech corner brackets
+      const bl = 8;
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = `rgba(${baseColor}, 1)`;
       ctx.beginPath();
-      ctx.moveTo(mp.x, mp.y);
-      ctx.lineTo(mp.x + mp.w, mp.y);
+      ctx.moveTo(mp.x, mp.y + bl); ctx.lineTo(mp.x, mp.y); ctx.lineTo(mp.x + bl, mp.y);
+      ctx.moveTo(mp.x + mp.w - bl, mp.y); ctx.lineTo(mp.x + mp.w, mp.y); ctx.lineTo(mp.x + mp.w, mp.y + bl);
+      ctx.moveTo(mp.x, mp.y + (mp.h||16) - bl); ctx.lineTo(mp.x, mp.y + (mp.h||16)); ctx.lineTo(mp.x + bl, mp.y + (mp.h||16));
+      ctx.moveTo(mp.x + mp.w - bl, mp.y + (mp.h||16)); ctx.lineTo(mp.x + mp.w, mp.y + (mp.h||16)); ctx.lineTo(mp.x + mp.w, mp.y + (mp.h||16) - bl);
       ctx.stroke();
-      ctx.setLineDash([]);
+
+      // Glowing core line
+      ctx.fillStyle = `rgba(${baseColor}, 0.6)`;
+      ctx.fillRect(mp.x + 10, mp.y + (mp.h||16)/2 - 1, mp.w - 20, 2);
 
       // Direction arrows for moving platforms
       if (mp.type === "hori") {
@@ -985,28 +1000,25 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.fill();
       }
     } else {
-      // Thin drop-through — dashed with subtle glow
-      ctx.strokeStyle = "#0f0";
-      ctx.lineWidth = 2;
-      ctx.setLineDash([8, 6]);
-      ctx.beginPath();
-      ctx.moveTo(p.x, p.y);
-      ctx.lineTo(p.x + p.w, p.y);
-      ctx.stroke();
-      ctx.setLineDash([]);
-      // Very subtle fill below
-      ctx.fillStyle = "rgba(0,255,65,0.04)";
+      // Glass-like translucent drop-through platform
+      ctx.fillStyle = "rgba(0, 255, 65, 0.15)";
       ctx.fillRect(p.x, p.y, p.w, p.h);
-      // Small brackets at edges
-      ctx.strokeStyle = "rgba(0,255,65,0.5)";
-      ctx.lineWidth = 1;
+      
+      // Crisp solid border
+      ctx.strokeStyle = "rgba(0, 255, 65, 0.8)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(p.x, p.y, p.w, p.h);
+      
+      // Top highlight
+      ctx.fillStyle = "rgba(255, 255, 255, 0.3)";
+      ctx.fillRect(p.x, p.y, p.w, 2);
+
+      // Inner structural line
       ctx.beginPath();
-      ctx.moveTo(p.x, p.y + 8);
-      ctx.lineTo(p.x, p.y);
-      ctx.lineTo(p.x + 8, p.y);
-      ctx.moveTo(p.x + p.w - 8, p.y);
-      ctx.lineTo(p.x + p.w, p.y);
-      ctx.lineTo(p.x + p.w, p.y + 8);
+      ctx.moveTo(p.x + 10, p.y + p.h / 2);
+      ctx.lineTo(p.x + p.w - 10, p.y + p.h / 2);
+      ctx.strokeStyle = "rgba(0, 255, 65, 0.4)";
+      ctx.lineWidth = 1;
       ctx.stroke();
     }
   }
